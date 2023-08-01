@@ -1,6 +1,6 @@
 package сontacts.model.check_format;
 
-import сontacts.model.exception_app.ThisAppException;
+import сontacts.model.exception_app.*;
 
 import java.util.Arrays;
 
@@ -14,6 +14,7 @@ public class Checking_service {
     Check_letter check_letter;
     String[] input_array;
     String[] result_array;
+    StringBuilder sb_temp;
     public Checking_service(String string_to_check){
         this.string_to_check = string_to_check;
         check_size = new Check_size();
@@ -23,23 +24,28 @@ public class Checking_service {
         check_letter = new Check_letter();
         input_array = new String[1];
         result_array = new String[6];
+        sb_temp = new StringBuilder();
     }
 
-    public String[] get_array(String string_to_check){
+    public String get_result_string(String string_to_check){
         input_array = string_to_check.trim().split("\\s+");
 
         if (!check_size.check_size(input_array)) {
             throw new ThisAppException("Ошибка: ");
         }
-        for(int i = 0; i < result_array.length; i++) {
-            result_array[i] = null;
-        }
+        Arrays.fill(result_array, null);
         check_for_index_3_5();
         check_for_index_0_2();
-
-        System.out.println("input: " + Arrays.toString(input_array));
-        System.out.println("result : " + Arrays.toString(result_array));
-        return result_array;
+        if (!check_result()) {
+            throw new NullValueException(sb_temp.toString());
+        } else {
+            sb_temp.setLength(0);
+            for (String s: result_array){
+                sb_temp.append("<").append(s).append(">");
+            }
+            sb_temp.append("\n");
+            return sb_temp.toString();
+        }
     }
 
     private void check_for_index_3_5(){
@@ -67,6 +73,26 @@ public class Checking_service {
                 j++;
             }
         }
+    }
+
+    private boolean check_result() {
+        boolean flag = true;
+        sb_temp.setLength(0);
+        sb_temp.append("Вы не ввели:\n");
+        for (int i = 0; i < result_array.length; i++){
+            if (result_array[i] == null){
+                switch (i) {
+                    case 0 -> sb_temp.append("- фамилию\n");
+                    case 1 -> sb_temp.append("- имя\n");
+                    case 2 -> sb_temp.append("- отчество\n");
+                    case 3 -> sb_temp.append("- дату рождения\n");
+                    case 4 -> sb_temp.append("- номер телефона\n");
+                    case 5 -> sb_temp.append("- пол\n");
+                }
+                flag = false;
+            }
+        }
+        return flag;
     }
 
 }

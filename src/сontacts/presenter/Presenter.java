@@ -17,8 +17,8 @@ public class Presenter {
 
     public void get_user_data(String userString){
         try {
-            service.get_user_data(userString);
-            view.printAnswer("\nНовый контакт успешно записан в файл.\n");
+            service.service_run(userString);
+            view.printAnswer("Новый контакт успешно записан в файл.\n");
         } catch (ThisAppException e){
             view.printAnswer(e.getMessage());
 

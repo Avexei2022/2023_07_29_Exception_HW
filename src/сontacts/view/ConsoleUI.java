@@ -1,14 +1,11 @@
 package сontacts.view;
 
-import сontacts.model.exception_app.ItemCountException;
-import сontacts.model.exception_app.ThisAppException;
 import сontacts.presenter.Presenter;
 
 import java.util.Scanner;
 
 public class ConsoleUI implements View {
 
-    private static String INPUT_ERROR = "\nВведено неверное значение\n";
     private Scanner scanner;
     private Presenter presenter;
     private boolean work;
@@ -34,7 +31,7 @@ public class ConsoleUI implements View {
                 номер телефона - целое беззнаковое число без форматирования
                 пол - символ латиницей f или m.
                 
-                Введите ваши данные: """);
+                Введите ваши данные:\s""");
         user_string = scanner.nextLine();
         presenter.get_user_data(user_string);
     }
@@ -56,6 +53,7 @@ public class ConsoleUI implements View {
     }
 
     private void inputError(){
+        String INPUT_ERROR = "\nВведено неверное значение\n";
         System.out.println(INPUT_ERROR);
     }
 
@@ -85,7 +83,7 @@ public class ConsoleUI implements View {
     }
 
     private boolean checkCommand(int numCommand){
-        int size = 1;
+        int size;
         size = menu.getSize();
         if (numCommand <= size){
             return true;
